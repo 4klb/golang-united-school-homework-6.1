@@ -82,7 +82,7 @@ func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
 			deletedShape = value
 			value = shape
 			exist = true
-			return deletedShape, nil
+			// return deletedShape, nil
 		}
 	}
 	if !exist {
@@ -91,7 +91,6 @@ func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
 		err = nil
 	}
 	return deletedShape, err
-
 }
 
 // SumPerimeter provides sum perimeter of all shapes in the list.
