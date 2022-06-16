@@ -117,9 +117,9 @@ func (b *box) SumArea() float64 {
 // whether circles are not exist in the list, then returns an error
 func (b *box) RemoveAllCircles() error {
 	var err error
-	var circle Circle
+	// var circle Circle
 	var exist bool
-	// circle := &Circle{}
+	circle := &Circle{}
 
 	for indx, _ := range b.shapes {
 		if reflect.TypeOf(b.shapes[indx]) == reflect.TypeOf(circle) {
