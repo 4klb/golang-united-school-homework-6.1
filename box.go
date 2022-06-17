@@ -43,32 +43,6 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 	return shape, errors.New("Shape by index doesn't exist or index went out of the range")
 }
 
-//ExtractByIndex allows getting shape by index and removes this shape from the list.
-//whether shape by index doesn't exist or index went out of the range, then it returns an error
-func (b *box) ExtractByIndex(i int) (Shape, error) {
-	var err error
-	var exist bool
-	var shape Shape
-	// circle := &Circle{}
-
-	for indx, value := range b.shapes {
-		if indx == i {
-			copy(b.shapes[indx:], b.shapes[indx+1:])
-			b.shapes = b.shapes[:len(b.shapes)-1]
-			shape = value
-			exist = true
-			indx--
-		}
-	}
-
-	if !exist {
-		err = errors.New("Shape by index doesn't exist or index went out of the range")
-	} else {
-		err = nil
-	}
-	return shape, err
-}
-
 // ReplaceByIndex allows replacing shape by index and returns removed shape.
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
@@ -134,4 +108,29 @@ func (b *box) RemoveAllCircles() error {
 		err = nil
 	}
 	return err
+}
+
+//ExtractByIndex allows getting shape by index and removes this shape from the list.
+//whether shape by index doesn't exist or index went out of the range, then it returns an error
+func (b *box) ExtractByIndex(i int) (Shape, error) {
+	var err error
+	var exist bool
+	var shape Shape
+
+	for indx, value := range b.shapes {
+		if indx == i {
+			copy(b.shapes[indx:], b.shapes[indx+1:])
+			b.shapes = b.shapes[:len(b.shapes)-1]
+			shape = value
+			exist = true
+			indx--
+		}
+	}
+
+	if !exist {
+		err = errors.New("Shape by index doesn't exist or index went out of the range")
+	} else {
+		err = nil
+	}
+	return shape, err
 }
