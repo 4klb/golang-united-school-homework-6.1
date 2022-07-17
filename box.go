@@ -2,7 +2,12 @@ package golang_united_school_homework
 
 import (
 	"errors"
-	"reflect"
+)
+
+var (
+	errIndex    = "Shape by index doesn't exist or index went out of the range"
+	errCircle   = "Circles are not exist in the list"
+	errAddShape = "It goes out of the shapesCapacity range"
 )
 
 // box contains list of shapes and able to perform operations on them
@@ -25,7 +30,7 @@ func (b *box) AddShape(shape Shape) error {
 		b.shapes = append(b.shapes, shape)
 		b.shapesCapacity--
 	} else {
-		return errors.New("It goes out of the shapesCapacity range")
+		return errors.New(errAddShape)
 	}
 	return nil
 }
@@ -40,7 +45,7 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 			return value, nil
 		}
 	}
-	return shape, errors.New("Shape by index doesn't exist or index went out of the range")
+	return shape, errors.New(errIndex)
 }
 
 // ReplaceByIndex allows replacing shape by index and returns removed shape.
@@ -53,13 +58,13 @@ func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
 	for indx, value := range b.shapes {
 		if indx == i {
 			deletedShape = value
-			value = shape
+			// value = shape
 			exist = true
 			// return deletedShape, nil
 		}
 	}
 	if !exist {
-		err = errors.New("Shape by index doesn't exist or index went out of the range")
+		err = errors.New(errIndex)
 	} else {
 		err = nil
 	}
@@ -89,25 +94,22 @@ func (b *box) SumArea() float64 {
 // RemoveAllCircles removes all circles in the list
 // whether circles are not exist in the list, then returns an error
 func (b *box) RemoveAllCircles() error {
-	var err error
-	var circle Circle
+	var res []Shape
 	var exist bool
 
-	for indx, _ := range b.shapes {
-		if reflect.TypeOf(b.shapes[indx]) == reflect.TypeOf(circle) {
-			copy(b.shapes[indx:], b.shapes[indx+1:])
-			b.shapes = b.shapes[:len(b.shapes)-1]
+	for _, v := range b.shapes {
+		if shape, ok := v.(*Circle); ok {
 			exist = true
-			indx--
+			continue
+		} else {
+			res = append(res, shape)
 		}
 	}
-
+	b.shapes = res
 	if !exist {
-		err = errors.New("Circles are not exist in the list")
-	} else {
-		err = nil
+		return errors.New(errCircle)
 	}
-	return err
+	return nil
 }
 
 //ExtractByIndex allows getting shape by index and removes this shape from the list.
@@ -128,7 +130,7 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 	}
 
 	if !exist {
-		err = errors.New("Shape by index doesn't exist or index went out of the range")
+		err = errors.New(errIndex)
 	} else {
 		err = nil
 	}
